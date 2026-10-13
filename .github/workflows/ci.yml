@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  # mcp-auth ref providing the authorization server for the end-to-end test. It must support
+  # external credential connectors (mcp-runtime/mcp-auth#24). Use the release tag once published.
+  MCP_AUTH_REF: 82da2b75e92742989a1d272273429fda5eed647b
+
+jobs:
+  test:
+    name: Test (Go ${{ matrix.go-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: ["1.26"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Check formatting
+        run: test -z "$(gofmt -l .)"
+      - name: Vet
+        run: go vet ./...
+      - name: Verify go.mod is tidy
+        run: |
+          go mod tidy
+          git diff --exit-code go.mod go.sum
+      - name: Unit and gateway tests
+        run: go test -race -count=1 ./...
+      - name: Static binary builds without cgo
+        run: CGO_ENABLED=0 go build -trimpath -o /dev/null ./cmd/onepassword-mcp-plugin
+
+  e2e:
+    name: End-to-end against mcp-auth
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: mcp-runtime/mcp-auth
+          ref: ${{ env.MCP_AUTH_REF }}
+          path: mcp-auth
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.26"
+      - name: Run the plugin against the real authorization server
+        env:
+          MCP_AUTH_SRC: ${{ github.workspace }}/mcp-auth
+        run: go test -count=1 -v ./e2e/
+
+  security:
+    name: Vulnerability scan and repository audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: golang/govulncheck-action@v1
+        with:
+          go-version-input: "1.26"
+          go-package: ./...
+          cache: false
+      - name: No keys, tokens or credential-like material is tracked
+        run: |
+          if git ls-files | grep -E '(^|/)(\.env|.*\.(pem|key|p12|pfx|token))$'; then
+            echo "sensitive artifact is tracked" >&2; exit 1
+          fi
+          if git grep -n -I -E 'BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|gh[pousr]_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}|ops_[A-Za-z0-9]{40,}' -- ':!.github'; then
+            echo "credential-like material found" >&2; exit 1
+          fi
+
+  image:
+    name: Container image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build --build-arg VERSION=ci --tag onepassword-mcp-plugin:ci .
+      - name: Image runs as non-root and refuses an invalid configuration
+        run: |
+          test "$(docker image inspect onepassword-mcp-plugin:ci --format '{{.Config.User}}')" = "nonroot:nonroot"
+          echo '{"bogus":1}' > "$RUNNER_TEMP/bad.json"
+          if docker run --rm -v "$RUNNER_TEMP/bad.json:/etc/onepassword-mcp/config.json:ro" onepassword-mcp-plugin:ci; then
+            echo "an invalid configuration must stop startup" >&2; exit 1
+          fi
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: onepassword-mcp-plugin:ci
+          format: table
+          scanners: vuln,secret,misconfig
+          vuln-type: os,library
+          severity: HIGH,CRITICAL
+          exit-code: "1"

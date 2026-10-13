@@ -1,0 +1,64 @@
+{
+  "authorization_server": {
+    "issuer": "https://auth.example.com"
+  },
+  "public_path_prefix": "/mcp-proxy",
+  "session_binding_key_file": "/run/secrets/session-binding.key",
+  "mappings_file": "/etc/onepassword-mcp/mappings.json",
+  "onepassword": {
+    "service_account_token_file": "/run/secrets/op-service-account.token",
+    "integration_name": "onepassword-mcp-plugin",
+    "timeout_seconds": 5
+  },
+  "credential_cache": { "ttl_seconds": 300, "max_entries": 1024 },
+  "limits": {
+    "max_request_bytes": 4194304,
+    "upstream_connect_timeout_seconds": 5,
+    "upstream_response_header_timeout_seconds": 60
+  },
+  "services": [
+    {
+      "id": "gitlab",
+      "resource_url": "https://mcp.example.com/mcp-proxy/gitlab/mcp",
+      "upstream_url": "https://gitlab.example.com/api/v4/mcp",
+      "required_scopes": ["gitlab:use"],
+      "resource_client": {
+        "client_id": "gitlab-secrets-plugin",
+        "key_id": "gitlab-plugin-1",
+        "private_key_file": "/run/secrets/gitlab-plugin.pem"
+      },
+      "headers": [
+        { "name": "X-GitLab-Username", "type": "direct", "field": "username" },
+        { "name": "X-GitLab-PAT-Token", "type": "direct", "field": "api_token" }
+      ]
+    },
+    {
+      "id": "gerrit",
+      "resource_url": "https://mcp.example.com/mcp-proxy/gerrit/mcp",
+      "upstream_url": "https://gerrit.example.com/mcp",
+      "required_scopes": ["gerrit:use"],
+      "resource_client": {
+        "client_id": "gerrit-secrets-plugin",
+        "key_id": "gerrit-plugin-1",
+        "private_key_file": "/run/secrets/gerrit-plugin.pem"
+      },
+      "headers": [
+        { "name": "Authorization", "type": "basic", "username_field": "username", "password_field": "http_password" }
+      ]
+    },
+    {
+      "id": "atlassian",
+      "resource_url": "https://mcp.example.com/mcp-proxy/atlassian/mcp",
+      "upstream_url": "https://atlassian-mcp.example.com/mcp",
+      "required_scopes": ["atlassian:use"],
+      "resource_client": {
+        "client_id": "atlassian-secrets-plugin",
+        "key_id": "atlassian-plugin-1",
+        "private_key_file": "/run/secrets/atlassian-plugin.pem"
+      },
+      "headers": [
+        { "name": "Authorization", "type": "basic", "username_field": "email", "password_field": "api_token" }
+      ]
+    }
+  ]
+}

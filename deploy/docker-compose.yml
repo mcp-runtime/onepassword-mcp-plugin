@@ -1,0 +1,48 @@
+# LOCAL TRIAL ONLY. mcp-auth runs in its insecure local-development mode (fixed login subject,
+# no real identity provider, plain HTTP). Use a real connector and HTTPS for anything else.
+#
+# The issuer is http://mcp-auth:8080 and must resolve to the same server for the browser and
+# the plugin (the token `iss` and the client-assertion audience both embed it). Add
+#   127.0.0.1 mcp-auth
+# to your hosts file first.
+#
+#   ./generate-local-keys.sh
+#   docker compose -f deploy/docker-compose.yml up --build      (from the repository root)
+name: onepassword-mcp-local
+services:
+  mcp-auth:
+    build:
+      # mcp-auth with external credential connector support (PR #24). After it is
+      # released, point this at the release tag.
+      context: https://github.com/mcp-runtime/mcp-auth.git#82da2b7:auth-server
+    environment:
+      MCP_AUTH_ISSUER: http://mcp-auth:8080
+      MCP_AUTH_LISTEN_ADDR: ":8080"
+      MCP_AUTH_RESOURCES: http://localhost:8090/gitlab/mcp
+      MCP_AUTH_RESOURCE_SCOPES: '{"http://localhost:8090/gitlab/mcp":["gitlab:use"]}'
+      MCP_AUTH_EXTERNAL_CREDENTIALS_FILE: /etc/mcp-auth/external-credentials.json
+      MCP_AUTH_PRIVATE_KEY_FILE: /run/secrets/as-signing.pem
+      MCP_AUTH_REGISTRATION_ENABLED: "true"
+      MCP_AUTH_LOCAL_DEVELOPMENT: "true"
+      MCP_AUTH_REQUIRE_HTTPS: "false"
+      MCP_AUTH_LOCAL_SUBJECT: alice
+    volumes:
+      - ./secrets/as-signing.pem:/run/secrets/as-signing.pem:ro
+      - ./secrets/gitlab-plugin.pub.pem:/etc/mcp-auth/gitlab-plugin.pub.pem:ro
+      - ../examples/external-credentials.local.json:/etc/mcp-auth/external-credentials.json:ro
+    ports: ["8080:8080"]
+
+  onepassword-mcp:
+    build:
+      context: ..
+      args: { VERSION: local }
+    depends_on: [mcp-auth]
+    environment:
+      ONEPASSWORD_MCP_CONFIG: /etc/onepassword-mcp/config.json
+    volumes:
+      - ../examples/config.local.json:/etc/onepassword-mcp/config.json:ro
+      - ./mappings.json:/etc/onepassword-mcp/mappings.json:ro
+      - ./secrets/gitlab-plugin.pem:/run/secrets/gitlab-plugin.pem:ro
+      - ./secrets/session-binding.key:/run/secrets/session-binding.key:ro
+      - ./secrets/op-service-account.token:/run/secrets/op-service-account.token:ro
+    ports: ["8090:8090"]

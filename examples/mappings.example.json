@@ -1,0 +1,31 @@
+{
+  "mappings": [
+    {
+      "issuer": "https://auth.example.com",
+      "subject": "alice@example.com",
+      "service": "gitlab",
+      "fields": {
+        "username": "op://MCP-Credentials/gitlab-alice/username",
+        "api_token": "op://MCP-Credentials/gitlab-alice/api_token"
+      }
+    },
+    {
+      "issuer": "https://auth.example.com",
+      "subject": "bob@example.com",
+      "service": "gitlab",
+      "fields": {
+        "username": "op://MCP-Credentials/gitlab-bob/username",
+        "api_token": "op://MCP-Credentials/gitlab-bob/api_token"
+      }
+    },
+    {
+      "issuer": "https://auth.example.com",
+      "subject": "alice@example.com",
+      "service": "gerrit",
+      "fields": {
+        "username": "op://MCP-Credentials/gerrit-alice/username",
+        "http_password": "op://MCP-Credentials/gerrit-alice/http_password"
+      }
+    }
+  ]
+}

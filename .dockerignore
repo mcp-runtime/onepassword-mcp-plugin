@@ -1,0 +1,9 @@
+.git
+.github
+**/*.pem
+**/*.key
+**/*.token
+**/secrets
+.env
+e2e
+docs

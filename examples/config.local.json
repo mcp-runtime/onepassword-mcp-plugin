@@ -1,0 +1,30 @@
+{
+  "allow_insecure_http": true,
+  "authorization_server": {
+    "issuer": "http://mcp-auth:8080"
+  },
+  "session_binding_key_file": "/run/secrets/session-binding.key",
+  "mappings_file": "/etc/onepassword-mcp/mappings.json",
+  "onepassword": {
+    "service_account_token_file": "/run/secrets/op-service-account.token",
+    "timeout_seconds": 5
+  },
+  "credential_cache": { "ttl_seconds": 300, "max_entries": 1024 },
+  "services": [
+    {
+      "id": "gitlab",
+      "resource_url": "http://localhost:8090/gitlab/mcp",
+      "upstream_url": "https://gitlab.example.com/api/v4/mcp",
+      "required_scopes": ["gitlab:use"],
+      "resource_client": {
+        "client_id": "gitlab-secrets-plugin",
+        "key_id": "gitlab-plugin-1",
+        "private_key_file": "/run/secrets/gitlab-plugin.pem"
+      },
+      "headers": [
+        { "name": "X-GitLab-Username", "type": "direct", "field": "username" },
+        { "name": "X-GitLab-PAT-Token", "type": "direct", "field": "api_token" }
+      ]
+    }
+  ]
+}
