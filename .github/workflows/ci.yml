@@ -9,9 +9,9 @@ permissions:
   contents: read
 
 env:
-  # mcp-auth ref providing the authorization server for the end-to-end test. It must support
-  # external credential connectors (mcp-runtime/mcp-auth#24). Use the release tag once published.
-  MCP_AUTH_REF: 82da2b75e92742989a1d272273429fda5eed647b
+  # mcp-auth release providing the authorization server for the end-to-end test. v0.5.0 is the
+  # first release with external credential connectors.
+  MCP_AUTH_REF: v0.5.0
 
 jobs:
   test:

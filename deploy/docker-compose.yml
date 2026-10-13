@@ -12,9 +12,8 @@ name: onepassword-mcp-local
 services:
   mcp-auth:
     build:
-      # mcp-auth with external credential connector support (PR #24). After it is
-      # released, point this at the release tag.
-      context: https://github.com/mcp-runtime/mcp-auth.git#82da2b7:auth-server
+      # mcp-auth v0.5.0 (first release with the external credential connector).
+      context: https://github.com/mcp-runtime/mcp-auth.git#v0.5.0:auth-server
     environment:
       MCP_AUTH_ISSUER: http://mcp-auth:8080
       MCP_AUTH_LISTEN_ADDR: ":8080"

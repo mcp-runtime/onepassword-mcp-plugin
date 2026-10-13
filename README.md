@@ -45,9 +45,8 @@ mapping takes effect on the next request.
 | Gerrit and Atlassian mappings | Config shapes only, not validated against those backends |
 | **Live run with a real 1Password service account** | **Pending** ([canary](docs/canary.md)) |
 
-Needs an mcp-auth with external credential connector support
-([mcp-auth#24](https://github.com/mcp-runtime/mcp-auth/pull/24)). Until it is released,
-`go.mod` pins the SDK to that commit.
+Requires [mcp-auth v0.5.0](https://github.com/mcp-runtime/mcp-auth/releases/tag/v0.5.0) or later
+(external credential connector) and its Go SDK `auth-client/go` v0.4.0, which `go.mod` pins.
 
 ## Quick start
 
