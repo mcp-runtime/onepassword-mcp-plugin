@@ -20,7 +20,7 @@ as long as they match the service's `headers` configuration.
 | Service | Item name (suggested) | Required fields | Notes |
 | --- | --- | --- | --- |
 | GitLab | `gitlab-<user>` | `username`, `api_token` | Personal access token with the scopes the MCP server needs (typically `api` or `read_api`). |
-| Gerrit | `gerrit-<user>` | `username`, `http_password` | The generated HTTP password, not the SSO password. |
+| Gerrit | `gerrit-<user>` | `username`, `http_password` | The generated HTTP password, not the account password. |
 | Atlassian | `atlassian-<user>` | `email`, `api_token` | Atlassian API token, with the account email. |
 
 How the item gets into the vault is an organizational choice: users add their own
@@ -33,9 +33,8 @@ A mapping binds a **verified identity** to **complete field references**. Identi
 `(issuer, subject)` pair from the mcp-auth access token. Use the issuer so the same subject
 at a different issuer can never collide.
 
-1. Find the user's `subject`. It is the `sub` claim mcp-auth issues, which is the identity
-   provider claim chosen by that server's `identity_claims` setting (for example an email).
-   Decode a token the user obtained, or check mcp-auth's audit log.
+1. Find the user's `subject`: the `sub` claim in the token mcp-auth issues for them. Decode a
+   token the user obtained, or ask whoever runs mcp-auth.
 2. Add an entry to the mappings file (see `examples/mappings.example.json`):
 
    ```json

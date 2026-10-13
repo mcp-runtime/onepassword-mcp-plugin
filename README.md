@@ -8,7 +8,7 @@ front of the real MCP server, authenticates every request through
 [mcp-auth](https://github.com/mcp-runtime/mcp-auth), fetches **that user's** credentials for
 **that service**, and injects them into the request it forwards upstream.
 
-* **Any upstream service** (GitLab, Gerrit, Atlassian, anything that takes credentials in headers) and **any login provider** that mcp-auth supports. The credential store is always 1Password.
+* Works with **any upstream service** (GitLab, Gerrit, Atlassian, anything that takes credentials in headers). The credential store is always 1Password.
 * mcp-auth stays the only OAuth authorization server. This plugin is not one.
 * Credentials are never returned to the MCP client.
 * The 1Password SDK and service-account token live only in this plugin, never in mcp-auth.

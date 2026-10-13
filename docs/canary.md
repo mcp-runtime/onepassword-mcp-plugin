@@ -8,7 +8,7 @@ been exercised.** Run this once a read-only service account is available.
 * A 1Password organization or integration vault (not Personal, Private, Employee or the
   default Shared vault) containing one test item per canary user.
 * A read-only service account granted that vault only, and its token in a mounted file.
-* mcp-auth with a real login connector and the external credential connector configured.
+* mcp-auth with login configured and the external credential connector set up ([connect guide](connect-mcp-auth.md)).
 * A test GitLab backend and two test users with distinct tokens.
 
 ## Checks

@@ -9,8 +9,7 @@ flowchart LR
     end
 
     subgraph platform["Your platform"]
-        auth["mcp-auth<br/>OAuth authorization server<br/>login, consent, tokens, sessions"]
-        idp["Identity provider<br/>SSO / OIDC"]
+        auth["mcp-auth<br/>OAuth authorization server<br/>consent, tokens, sessions"]
         subgraph plugin["onepassword-mcp-plugin"]
             gw["Gateway<br/>verify token, forward"]
             map["Mappings<br/>identity to op:// refs"]
@@ -22,7 +21,6 @@ flowchart LR
     up["Upstream MCP server<br/>GitLab, Gerrit, Atlassian"]
 
     client -- "1. OAuth (code + PKCE)" --> auth
-    auth -- "login" --> idp
     client -- "2. MCP + Bearer token" --> gw
     gw -- "3. token exchange<br/>private_key_jwt" --> auth
     gw --> map --> res
@@ -33,7 +31,7 @@ flowchart LR
 | Component | Owns |
 | --- | --- |
 | **MCP client** | Standard MCP OAuth. Holds only a short-lived token. Never sees upstream credentials. |
-| **mcp-auth** | Login, consent, tokens, session validity and revocation, resource and scope policy, authenticating the plugin, minting the credential-access assertion. It does not know about 1Password and has no 1Password SDK or token. |
+| **mcp-auth** | Authenticates the user and issues tokens: consent, tokens, session validity and revocation, resource and scope policy, authenticating the plugin, minting the credential-access assertion. It does not know about 1Password and has no 1Password SDK or token. |
 | **Plugin gateway** | Verifying the token on every request, requesting the assertion, header allowlisting, injection, streaming, session binding. |
 | **Mappings** | Administrator-approved `(issuer, subject, service)` to `op://` references. |
 | **Resolver** | The only code that imports the 1Password SDK and holds the service-account token. |

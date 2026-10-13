@@ -33,8 +33,7 @@ For each service, add to `MCP_AUTH_EXTERNAL_CREDENTIALS_FILE` (see
 ```
 
 and list the resource URL in `MCP_AUTH_RESOURCES` with its scopes in `MCP_AUTH_RESOURCE_SCOPES`.
-Use a real login connector (`MCP_AUTH_CONNECTOR`). Identity and login selection stay
-mcp-auth policy.
+How users log in is mcp-auth's own setting and does not affect the plugin.
 
 ## Issuer and token endpoint
 
@@ -79,6 +78,6 @@ cp deploy/mappings.json.example deploy/mappings.json   # set issuer to http://mc
 docker compose -f deploy/docker-compose.yml up --build
 ```
 
-This runs mcp-auth in its insecure local-development mode (fixed login subject, plain
+This runs mcp-auth in its insecure local-development mode (one fixed test user, plain
 HTTP). It exercises discovery and OAuth. Credential retrieval needs a real service account:
 see [canary](canary.md).

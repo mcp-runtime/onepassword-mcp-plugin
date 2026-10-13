@@ -1,5 +1,5 @@
-# LOCAL TRIAL ONLY. mcp-auth runs in its insecure local-development mode (fixed login subject,
-# no real identity provider, plain HTTP). Use a real connector and HTTPS for anything else.
+# LOCAL TRIAL ONLY. mcp-auth runs in its insecure local-development mode (one fixed test user,
+# plain HTTP). Do not use it for anything real.
 #
 # The issuer is http://mcp-auth:8080 and must resolve to the same server for the browser and
 # the plugin (the token `iss` and the client-assertion audience both embed it). Add

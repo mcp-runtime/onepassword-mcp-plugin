@@ -9,7 +9,6 @@ flowchart LR
     subgraph mcpauth["mcp-auth config"]
         env["env: issuer, resources, scopes"]
         ext["external-credentials.json<br/>service + plugin public key"]
-        sso["connectors.json<br/>user login (SSO)"]
     end
     subgraph plug["plugin config"]
         cfg["config.json<br/>issuer, resource_url, client_id, private key"]
@@ -42,7 +41,6 @@ deploy/generate-resource-client.sh gitlab
 | `MCP_AUTH_RESOURCES` | The plugin's public URL per service, exactly as MCP clients use it. |
 | `MCP_AUTH_RESOURCE_SCOPES` | JSON map of that URL to its scopes, for example `{"https://mcp.example.com/mcp-proxy/gitlab/mcp":["gitlab:use"]}`. |
 | `MCP_AUTH_EXTERNAL_CREDENTIALS_FILE` | Path to the file below. |
-| `MCP_AUTH_CONNECTORS_FILE`, `MCP_AUTH_CONNECTOR` | How users log in (your SSO). Nothing to do with 1Password. |
 | `MCP_AUTH_REGISTRATION_ENABLED` | `true`, so MCP clients can register themselves. |
 | `MCP_AUTH_STORE`, `MCP_AUTH_DATABASE_URL`, `MCP_AUTH_PRIVATE_KEY_FILE` | Durable store and signing key. Do not run production on the in-memory store or an ephemeral key. |
 
@@ -68,10 +66,6 @@ one entry per service:
 mcp-auth holds only the plugin's **public** key. It never receives a 1Password token or any
 credential. mcp-auth does not start if this file is invalid.
 
-**Login connector** ([`connectors.json`](../examples/mcp-auth/connectors.json)): your normal SSO.
-`identity_claims` decides what the user's `sub` is (for example `["email"]`). That value is
-what you put in `mappings.json` as the subject.
-
 ## 3. Configure the plugin
 
 Production example: [`config.production.json`](../examples/config.production.json). Mount the
@@ -86,7 +80,7 @@ private key from step 1, the 1Password service-account token, and `mappings.json
 | Scope | `MCP_AUTH_RESOURCE_SCOPES`, `required_scopes` | `services[].required_scopes` |
 | Plugin identity | `resource_client.client_id` | `services[].resource_client.client_id` |
 | Plugin key | `public_key_file` (public half) | `private_key_file` (private half) |
-| Subject | SSO `identity_claims` value | `subject` in `mappings.json` |
+| Subject | the `sub` mcp-auth puts in the user's token | `subject` in `mappings.json` |
 | Issuer in mappings | `MCP_AUTH_ISSUER` | `issuer` in `mappings.json` |
 
 Two rules cause most failures:
