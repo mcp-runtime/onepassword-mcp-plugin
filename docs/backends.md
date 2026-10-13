@@ -1,6 +1,8 @@
 # Backends
 
-A backend is a `services[]` entry: a fixed `upstream_url`, the
+The plugin works with any upstream MCP service. GitLab, Gerrit and Atlassian below are examples; the
+credential store is always 1Password, and what changes per service is only how its credentials become
+headers. A backend is a `services[]` entry: a fixed `upstream_url`, the
 header rules, and its own mcp-auth resource client. Every service uses the same 1Password lookup.
 
 ## GitLab (first implementation)
