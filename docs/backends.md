@@ -1,8 +1,7 @@
 # Backends
 
-The gateway is generic. A backend is a `services[]` entry: a fixed `upstream_url`, the
-header rules, and its own mcp-auth resource client. Adding a service does not add a
-credential-resolution path.
+A backend is a `services[]` entry: a fixed `upstream_url`, the
+header rules, and its own mcp-auth resource client. Every service uses the same 1Password lookup.
 
 ## GitLab (first implementation)
 

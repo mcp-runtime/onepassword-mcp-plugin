@@ -4,7 +4,7 @@ go 1.24.0
 
 require (
 	github.com/1password/onepassword-sdk-go v0.4.1
-	github.com/Agent-Hellboy/mcp-auth/auth-client/go v0.3.1-0.20261013130712-82da2b75e927
+	github.com/Agent-Hellboy/mcp-auth/auth-client/go v0.4.0
 )
 
 require (

@@ -117,7 +117,7 @@ func newStack(t *testing.T) *stack {
 	writePEM(t, filepath.Join(dir, "rc-public.pem"), "PUBLIC KEY", rcPub)
 
 	ext, _ := json.Marshal([]map[string]any{{
-		"id": "gitlab-secrets", "resource": resource, "required_scopes": []string{"gitlab:use"},
+		"id": "gitlab-1password", "resource": resource, "required_scopes": []string{"gitlab:use"},
 		"resource_client": map[string]any{"client_id": "gitlab-plugin", "public_key_file": filepath.Join(dir, "rc-public.pem")},
 	}})
 	if err := os.WriteFile(filepath.Join(dir, "external.json"), ext, 0o600); err != nil {

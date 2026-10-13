@@ -17,7 +17,7 @@
       "upstream_url": "https://gitlab.example.com/api/v4/mcp",
       "required_scopes": ["gitlab:use"],
       "resource_client": {
-        "client_id": "gitlab-secrets-plugin",
+        "client_id": "gitlab-1password-plugin",
         "key_id": "gitlab-plugin-1",
         "private_key_file": "/run/secrets/gitlab-plugin.pem"
       },

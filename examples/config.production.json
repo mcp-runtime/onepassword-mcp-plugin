@@ -23,7 +23,7 @@
       "upstream_url": "https://gitlab.example.com/api/v4/mcp",
       "required_scopes": ["gitlab:use"],
       "resource_client": {
-        "client_id": "gitlab-secrets-plugin",
+        "client_id": "gitlab-1password-plugin",
         "key_id": "gitlab-plugin-1",
         "private_key_file": "/run/secrets/gitlab-plugin.pem"
       },
@@ -38,7 +38,7 @@
       "upstream_url": "https://gerrit.example.com/mcp",
       "required_scopes": ["gerrit:use"],
       "resource_client": {
-        "client_id": "gerrit-secrets-plugin",
+        "client_id": "gerrit-1password-plugin",
         "key_id": "gerrit-plugin-1",
         "private_key_file": "/run/secrets/gerrit-plugin.pem"
       },
@@ -52,7 +52,7 @@
       "upstream_url": "https://atlassian-mcp.example.com/mcp",
       "required_scopes": ["atlassian:use"],
       "resource_client": {
-        "client_id": "atlassian-secrets-plugin",
+        "client_id": "atlassian-1password-plugin",
         "key_id": "atlassian-plugin-1",
         "private_key_file": "/run/secrets/atlassian-plugin.pem"
       },

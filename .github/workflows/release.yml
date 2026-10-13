@@ -10,7 +10,7 @@ permissions:
 
 env:
   IMAGE: ghcr.io/mcp-runtime/onepassword-mcp-plugin
-  MCP_AUTH_REF: 82da2b75e92742989a1d272273429fda5eed647b
+  MCP_AUTH_REF: v0.5.0
 
 jobs:
   verify:

@@ -45,9 +45,7 @@ mapping takes effect on the next request.
 | Gerrit and Atlassian mappings | Config shapes only, not validated against those backends |
 | **Live run with a real 1Password service account** | **Pending** ([canary](docs/canary.md)) |
 
-Needs an mcp-auth with external credential connector support
-([mcp-auth#24](https://github.com/mcp-runtime/mcp-auth/pull/24)). Until it is released,
-`go.mod` pins the SDK to that commit.
+Requires **mcp-auth v0.5.0 or later** (external credential connectors).
 
 ## Quick start
 
@@ -67,6 +65,7 @@ Run it with a config and mounted secrets: see [Deployment](docs/deployment.md) a
 | [Architecture](docs/architecture.md) | Components, request flow, trust boundaries |
 | [Configuration](docs/configuration.md) | Config keys, header transforms, caching, rotation, revocation |
 | [Security](docs/security.md) | What is enforced and how |
+| [Connect mcp-auth](docs/connect-mcp-auth.md) | The mcp-auth config and the values that must match |
 | [Onboarding](docs/onboarding.md) | Where users store credentials, mappings, rotation, offboarding |
 | [Client config](docs/client-config.md) | Before and after for MCP clients |
 | [Backends](docs/backends.md) | GitLab, Gerrit, Atlassian, adding a service |

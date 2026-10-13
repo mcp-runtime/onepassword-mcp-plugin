@@ -33,7 +33,7 @@ flowchart LR
 | Component | Owns |
 | --- | --- |
 | **MCP client** | Standard MCP OAuth. Holds only a short-lived token. Never sees upstream credentials. |
-| **mcp-auth** | Login, consent, tokens, session validity and revocation, resource and scope policy, authenticating the plugin, minting the credential-access assertion. No secret-manager dependency. |
+| **mcp-auth** | Login, consent, tokens, session validity and revocation, resource and scope policy, authenticating the plugin, minting the credential-access assertion. It does not know about 1Password and has no 1Password SDK or token. |
 | **Plugin gateway** | Verifying the token on every request, requesting the assertion, header allowlisting, injection, streaming, session binding. |
 | **Mappings** | Administrator-approved `(issuer, subject, service)` to `op://` references. |
 | **Resolver** | The only code that imports the 1Password SDK and holds the service-account token. |

@@ -27,9 +27,9 @@ For each service, add to `MCP_AUTH_EXTERNAL_CREDENTIALS_FILE` (see
 [wire contract](https://github.com/mcp-runtime/mcp-auth/blob/main/docs/external-credentials.md)):
 
 ```json
-[{ "id": "gitlab-secrets", "resource": "https://mcp.example.com/mcp-proxy/gitlab/mcp",
+[{ "id": "gitlab-1password", "resource": "https://mcp.example.com/mcp-proxy/gitlab/mcp",
    "required_scopes": ["gitlab:use"],
-   "resource_client": { "client_id": "gitlab-secrets-plugin", "public_key_file": "/etc/mcp-auth/gitlab-plugin.pub.pem" } }]
+   "resource_client": { "client_id": "gitlab-1password-plugin", "public_key_file": "/etc/mcp-auth/gitlab-plugin.pub.pem" } }]
 ```
 
 and list the resource URL in `MCP_AUTH_RESOURCES` with its scopes in `MCP_AUTH_RESOURCE_SCOPES`.
